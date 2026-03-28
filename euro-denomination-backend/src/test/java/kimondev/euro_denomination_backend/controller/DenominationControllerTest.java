@@ -44,12 +44,15 @@ public class DenominationControllerTest {
 
     @Test
     void shouldReturnBadRequestForNegativeAmount() throws Exception {
+
         when(service.calculate(-10))
-                .thenThrow(new IllegalArgumentException());
+                .thenThrow(new IllegalArgumentException("Amount must be positive"));
 
         mockMvc.perform(get("/api/denomination")
                         .param("amount", "-10"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Invalid request"))
+                .andExpect(jsonPath("$.message").value("Amount must be positive"));
     }
 
     @Test
