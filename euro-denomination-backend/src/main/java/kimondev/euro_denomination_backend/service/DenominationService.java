@@ -6,6 +6,9 @@ import java.util.Map;
 public class DenominationService {
 
     public Map<Integer, Integer> calculate(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount is negative");
+        }
         System.out.println("Calculating denomination for amount: " + amount);
 
         int[] denominations = {500, 200, 100, 50, 20, 10, 5, 2, 1};
