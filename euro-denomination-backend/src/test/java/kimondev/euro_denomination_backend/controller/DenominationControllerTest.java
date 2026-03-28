@@ -30,4 +30,17 @@ public class DenominationControllerTest {
                 .andExpect(jsonPath("$['5']").value(1))
                 .andExpect(jsonPath("$['2']").value(1));
     }
+
+    @Test
+    void shouldReturnBadRequestForNegativeAmount() throws Exception {
+        mockMvc.perform(get("/api/denomination")
+                        .param("amount", "-10"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenAmountMissing() throws Exception {
+        mockMvc.perform(get("/api/denomination"))
+                .andExpect(status().isBadRequest());
+    }
 }
