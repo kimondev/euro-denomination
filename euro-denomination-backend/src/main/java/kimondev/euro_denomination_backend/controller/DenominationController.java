@@ -3,9 +3,8 @@ package kimondev.euro_denomination_backend.controller;
 import kimondev.euro_denomination_backend.service.DenominationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -22,5 +21,10 @@ public class DenominationController {
     public Map<Integer, Integer> calculate(@RequestParam int amount) {
         log.debug("Calculating denominations for amount={}", amount);
         return denominationService.calculate(amount);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void handleIllegalArgumentException() {
     }
 }
