@@ -1,0 +1,19 @@
+services:
+  backend:
+    build:
+      context: ./euro-denomination-backend
+      dockerfile: Dockerfile
+    container_name: euro-denomination-backend
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./euro-denomination-frontend
+      dockerfile: Dockerfile
+    container_name: euro-denomination-frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
