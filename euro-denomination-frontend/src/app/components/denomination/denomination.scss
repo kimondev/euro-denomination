@@ -1,0 +1,117 @@
+.denomination-page {
+  padding: 1rem;
+}
+
+.calculate-button {
+  width: 100%;
+}
+
+.results-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.summary-info {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.summary-value-diff {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: green;
+}
+
+.summary-value {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.table-amount-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.result-card {
+  width: 100%;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.denomination-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.diff-positive {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.diff-negative {
+  color: red;
+  font-weight: 600;
+}
+
+.diff-neutral {
+  color: inherit;
+  font-weight: 600;
+}
+
+:host ::ng-deep .table-wrapper .p-datatable {
+  min-width: 22rem;
+}
+
+@media (min-width: 768px) {
+
+  .amount-field {
+    flex: 1;
+  }
+
+  .calculate-button {
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .results-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .result-card {
+    flex: 1;
+    min-width: 0;
+  }
+}
