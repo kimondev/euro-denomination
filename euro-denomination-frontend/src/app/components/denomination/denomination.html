@@ -1,0 +1,122 @@
+<div class="denomination-page">
+
+  <div style="display: flex; align-items: center; gap: 0.5em; margin-bottom: 1em;">
+    <p-toggleButton [(ngModel)]="useLocalCalculation" [ngModelOptions]="{ standalone: true }"
+                    onLabel="Lokal" offLabel="Backend"
+                    onIcon="pi pi-check" offIcon="pi pi-cloud">
+    </p-toggleButton>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="calculate()">
+    <div style="display: flex; gap: 1em; flex-wrap: wrap; width: 100%; flex-direction: column">
+      <p-ifta-label>
+        <label [for]="'amount'">Betrag</label>
+        <input
+          [id]="'amount'"
+          type="number"
+          pInputText
+          formControlName="amount"
+          autocomplete="0" />
+      </p-ifta-label>
+      <button type="submit" class="calculate-button" pButton>
+        <i class="pi pi-check" pButtonIcon></i>
+        <span pButtonLabel> Stückelung berechnen </span>
+      </button>
+    </div>
+  </form>
+  @if (result) {
+    <div class="summary-info">
+      <div class="summary-row">
+        <span class="summary-label">Alter Betrag:</span>
+        @if (hasMultipleCalculations) {
+          <span class="summary-value">{{ previousAmount | number: '1.2-2' }}€</span>
+        } @else {
+          <span class="summary-value">-</span>
+        }
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Neuer Betrag:</span>
+        <span class="summary-value">{{ currentAmount | number: '1.2-2' }}€</span>
+      </div>
+    </div>
+
+    <div class="results-layout">
+
+      <p-card class="result-card">
+        <h3>Stückelung</h3>
+        <div class="table-amount-info">
+          <span class="summary-label">Neuer Betrag:</span>
+          <span class="summary-value">{{ currentAmount | number: '1.2-2' }}€</span>
+        </div>
+        @if (result) {
+          <div class="table-wrapper">
+            <p-table [value]="tableData">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Schein/Münze (€)</th>
+                  <th>Anzahl</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td>
+                    <div class="denomination-value">
+                      @if (isBanknote(row.denomination)) {
+                        <i class="pi pi-money-bill"  style="color: #117a31"></i>
+                      } @else if (isCoin(row.denomination)) {
+                        <i class="pi pi-circle-on" style="color: #a0890f"></i>
+                      }
+                      <span>{{ row.denomination }}</span>
+                    </div>
+                  </td>
+                  <td>{{ row.count }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        }
+      </p-card>
+      @if (hasMultipleCalculations && diffResult) {
+        <p-card class="result-card">
+          <h3>Differenz</h3>
+          <div class="table-amount-info">
+            <span class="summary-label">Differenzsumme:</span>
+            <span [ngClass]="diffTableAmount > 0 ? 'diff-positive' : (diffTableAmount < 0 ? 'diff-negative' : 'diff-neutral')" class="summary-value">
+              {{ diffTableAmount > 0 ? '+' : '' }}{{ diffTableAmount | number: '1.2-2' }}€
+            </span>
+          </div>
+          <div class="table-wrapper">
+            <p-table [value]="diffTableData">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Schein/Münze (€)</th>
+                  <th>Änderung</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td>
+                    <div class="denomination-value">
+                      @if (isBanknote(row.denomination)) {
+                        <span class="banknote-icon" title="Geldschein" aria-hidden="true"></span>
+                      } @else if (isCoin(row.denomination)) {
+                        <span class="coin-icon" title="Münze" aria-hidden="true"></span>
+                      }
+                      <span>{{ row.denomination }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span [ngClass]="row.count > 0 ? 'diff-positive' : (row.count < 0 ? 'diff-negative' : 'diff-neutral')">
+                      {{ row.count > 0 ? '+' : '' }}{{ row.count }}
+                    </span>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </p-card>
+      }
+    </div>
+  }
+</div>
