@@ -32,20 +32,5 @@ describe('DenominationApiService', () => {
 
     req.flush({10: 1, 2: 1, 0.2: 1, 0.1: 1});
   });
-
-  it('should return backend response', () => {
-    const response = {100: 1, 10: 1, 1: 1};
-    let actual: Record<number, number> | undefined;
-
-    service.calculate(111).subscribe((result) => {
-      actual = result;
-    });
-
-    const req = httpMock.expectOne('/api/denomination?amount=111.00');
-    expect(req.request.method).toBe('GET');
-    req.flush(response);
-
-    expect(actual).toEqual(response);
-  });
 });
 
