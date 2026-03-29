@@ -8,6 +8,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static org.mockito.Mockito.when;
@@ -25,13 +26,13 @@ public class DenominationControllerTest {
 
     @Test
     void shouldReturnDenominationForAmount() throws Exception {
-        when(service.calculate(137))
+        when(service.calculate(new BigDecimal("137")))
                 .thenReturn(Map.of(
-                        100, 1,
-                        20, 1,
-                        10, 1,
-                        5, 1,
-                        2, 1
+                        new BigDecimal("100"), 1,
+                        new BigDecimal("20"), 1,
+                        new BigDecimal("10"), 1,
+                        new BigDecimal("5"), 1,
+                        new BigDecimal("2"), 1
                 ));
         mockMvc.perform(get("/api/denomination?amount=137"))
                 .andExpect(status().isOk())
@@ -43,9 +44,33 @@ public class DenominationControllerTest {
     }
 
     @Test
+    void shouldReturnDenominationForCentAmount() throws Exception {
+        when(service.calculate(new BigDecimal("12.38")))
+                .thenReturn(Map.of(
+                        new BigDecimal("10"), 1,
+                        new BigDecimal("2"), 1,
+                        new BigDecimal("0.2"), 1,
+                        new BigDecimal("0.1"), 1,
+                        new BigDecimal("0.05"), 1,
+                        new BigDecimal("0.02"), 1,
+                        new BigDecimal("0.01"), 1
+                ));
+
+        mockMvc.perform(get("/api/denomination").param("amount", "12.38"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$['10']").value(1))
+                .andExpect(jsonPath("$['2']").value(1))
+                .andExpect(jsonPath("$['0.2']").value(1))
+                .andExpect(jsonPath("$['0.1']").value(1))
+                .andExpect(jsonPath("$['0.05']").value(1))
+                .andExpect(jsonPath("$['0.02']").value(1))
+                .andExpect(jsonPath("$['0.01']").value(1));
+    }
+
+    @Test
     void shouldReturnBadRequestForNegativeAmount() throws Exception {
 
-        when(service.calculate(-10))
+        when(service.calculate(new BigDecimal("-10")))
                 .thenThrow(new IllegalArgumentException("Amount must be positive"));
 
         mockMvc.perform(get("/api/denomination")

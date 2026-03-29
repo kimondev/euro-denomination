@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -17,8 +19,13 @@ public class DenominationController {
     }
 
     @GetMapping("/api/denomination")
-    public Map<Integer, Integer> calculate(@RequestParam int amount) {
+    public Map<String, Integer> calculate(@RequestParam BigDecimal amount) {
         log.debug("Calculating denominations for amount={}", amount);
-        return denominationService.calculate(amount);
+
+        Map<String, Integer> response = new LinkedHashMap<>();
+        denominationService.calculate(amount)
+                .forEach((denomination, count) -> response.put(denomination.toPlainString(), count));
+
+        return response;
     }
 }
