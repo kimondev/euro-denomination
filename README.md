@@ -8,7 +8,6 @@ Monorepo mit:
 ## Projektstruktur
 
 ```text
-dedalus/
   docker-compose.yml
   euro-denomination-backend/
   euro-denomination-frontend/
